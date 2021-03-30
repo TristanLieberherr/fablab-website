@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +22,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/messages', [MessageController::class, 'index']);
 Route::prefix('/message')->group(function () { 
     Route::post('/store', [MessageController::class, 'store']);
-});
-
-Route::get('/users', [UserController::class, 'index']);
-Route::prefix('/user')->group(function () { 
-    Route::post('/store', [UserController::class, 'store']);
 });

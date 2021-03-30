@@ -40,7 +40,7 @@ class MessageController extends Controller
         $newMessage->text = $request->message['text'];
         $newMessage->date = $request->message['date'];
         $newMessage->save();
-        return $newMessage;  
+        return $newMessage;
     }
 
     /**
