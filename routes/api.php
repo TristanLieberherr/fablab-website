@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\JobController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/messages', [MessageController::class, 'index']);
+Route::get('/messages/{id}', [MessageController::class, 'index']);
 Route::prefix('/message')->group(function () { 
     Route::post('/store', [MessageController::class, 'store']);
+});
+
+Route::get('/jobs', [JobController::class, 'index']);
+Route::prefix('/job')->group(function () { 
+    Route::post('/store', [JobController::class, 'store']);
 });

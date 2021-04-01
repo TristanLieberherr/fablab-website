@@ -3,19 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Message;
+use App\Models\Job;
 
-class MessageController extends Controller
+class JobController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        //error_log("index() called with id $id");
-        return Message::where('job_id', $id)->get();
+        return Job::all();
     }
 
     /**
@@ -36,13 +35,14 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        $newMessage = new Message;
-        $newMessage->user_id = $request->message['user_id'];
-        $newMessage->job_id = $request->message['job_id'];
-        $newMessage->text = $request->message['text'];
-        $newMessage->date = $request->message['date'];
-        $newMessage->save();
-        return $newMessage;
+        $newJob = new Job;
+        $newJob->client_id = $request->job['client_id'];
+        $newJob->technician_id = $request->job['technician_id'];
+        $newJob->job_type = $request->job['job_type'];
+        $newJob->deadline_date = $request->job['deadline_date'];
+        $newJob->status = "NEW";
+        $newJob->save();
+        return $newJob;
     }
 
     /**
