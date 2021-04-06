@@ -12,9 +12,14 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        return Job::all();
+        if($id == 0){
+            return Job::all();
+        }
+        else{
+            return Job::where('client_id', $id)->get();
+        }
     }
 
     /**
@@ -76,7 +81,10 @@ class JobController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $job = Job::find($id);
+        $job->status = $request->new_status;
+        $job->save();
+        return $job;
     }
 
     /**

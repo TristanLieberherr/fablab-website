@@ -14,7 +14,6 @@ class MessageController extends Controller
      */
     public function index($id)
     {
-        //error_log("index() called with id $id");
         return Message::where('job_id', $id)->get();
     }
 

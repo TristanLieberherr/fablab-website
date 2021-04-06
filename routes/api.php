@@ -20,12 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/messages/{id}', [MessageController::class, 'index']);
+Route::get('/messages/{id}', [MessageController::class, 'index']);//->middleware('auth');
 Route::prefix('/message')->group(function () { 
     Route::post('/store', [MessageController::class, 'store']);
 });
 
-Route::get('/jobs', [JobController::class, 'index']);
+Route::get('/jobs/{id}', [JobController::class, 'index']);//->name("jobsRoute");
 Route::prefix('/job')->group(function () { 
     Route::post('/store', [JobController::class, 'store']);
+    Route::post('/update/{id}', [JobController::class, 'update']);
 });

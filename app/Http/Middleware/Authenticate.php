@@ -14,6 +14,9 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+        error_log("Redirected");
+        error_log($request);
+        return 'https://aai-demo.switch.ch/secure';
         if (! $request->expectsJson()) {
             return route('login');
         }
