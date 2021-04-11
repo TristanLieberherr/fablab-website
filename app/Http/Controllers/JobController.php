@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Job;
+use App\Models\Notification;
 
 class JobController extends Controller
 {
@@ -84,6 +85,13 @@ class JobController extends Controller
         $job = Job::find($id);
         $job->status = $request->new_status;
         $job->save();
+
+        $notification = new Notification;
+        $notification->user_id = $job->client_id;
+        $notification->text = "Nouveau statut: $job->status sur votre commande de $job->job_type du $job->created_at";
+        $notification->url = "";
+        $notification->save();
+
         return $job;
     }
 
