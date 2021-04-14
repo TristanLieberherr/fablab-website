@@ -15,6 +15,11 @@ class LoginController extends Controller
         }
         return abort(403);
     }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+    }
     /**
      * Display a listing of the resource.
      *
