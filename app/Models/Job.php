@@ -13,6 +13,7 @@ class Job extends Model
         'technician_id',
         'job_type',
         'status',
-        'deadline-date'
+        'deadline-date',
+        'status_alert'
     ];
 }

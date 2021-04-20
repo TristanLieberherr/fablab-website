@@ -38,23 +38,31 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $newMessage = new Message;
-        $newMessage->user_id = $request->message['user_id'];
-        $newMessage->job_id = $request->message['job_id'];
-        $newMessage->text = $request->message['text'];
-        $newMessage->date = $request->message['date'];
+        $newMessage->user_id = $request->user_id;
+        $newMessage->job_id = $request->job_id;
+        $newMessage->text = $request->text;
         $newMessage->save();
 
-        $notification = new Notification;
-        error_log("Job ID:$newMessage->job_id");
         $job = Job::find($newMessage->job_id);
-        if($newMessage->user_id == $job->client_id){
-            $notification->user_id = $job->technician_id;
+        /*if($newMessage->user_id == $job->client_id){      //Pour le dev, $id = $newMessage->user_id
+            $id = $job->technician_id;
         }
         elseif($newMessage->user_id == $job->technician_id){
-            $notification->user_id = $job->client_id;
+            $id = $job->client_id;
+        }*/
+        $id = $newMessage->user_id;
+
+        error_log("New message from user $newMessage->user_id, notification to user $id");
+        $notification = Notification::firstOrNew(['type' => 'message', 'user_id' => $id, 'type_id' => $newMessage->job_id]);
+        if(isset($notification->id)){//Entry exists
+            $notification->increment('count');
         }
-        $notification->text = "Vous avez reçu de nouveaux messages";
-        $notification->url = "applications/chat/$job->id";
+        else{
+            $notification->url = "";
+            $notification->count = 1;
+        }
+        
+        $notification->text = "A.Ventura : $notification->count nouveaux messages";
         $notification->save();
         
         return $newMessage;
