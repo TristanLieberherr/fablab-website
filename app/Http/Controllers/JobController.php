@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Job;
 use App\Models\Notification;
 use App\Models\User;
+use App\Events\NotificationEvent;
+use App\Events\JobEvent;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -116,12 +119,16 @@ class JobController extends Controller
 
             $notification->text = "$notification->count Commandes ont été modifiées";
             $notification->save();
+            $job->save();
+
+            broadcast(new NotificationEvent($notification))->toOthers();
+            broadcast(new JobEvent($job, $job->client_id))->toOthers();
         }
         if(isset($request->status_alert)){
             $job->status_alert = $request->status_alert;
+            $job->save();
         }
-        $job->save();
-
+      
         return $job;
     }
 

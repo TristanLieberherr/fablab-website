@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Models\Notification;
 use App\Models\Job;
+use App\Models\User;
+use App\Events\NotificationEvent;
+use App\Events\MessageEvent;
 
 class MessageController extends Controller
 {
@@ -44,26 +47,30 @@ class MessageController extends Controller
         $newMessage->save();
 
         $job = Job::find($newMessage->job_id);
-        /*if($newMessage->user_id == $job->client_id){      //Pour le dev, $id = $newMessage->user_id
-            $id = $job->technician_id;
+        if($newMessage->user_id == $job->client_id){
+            $emitterID = $job->client_id;
+            $recipientID = $job->technician_id;
         }
         elseif($newMessage->user_id == $job->technician_id){
-            $id = $job->client_id;
-        }*/
-        $id = $newMessage->user_id;
+          $emitterID = $job->technician_id;
+          $recipientID = $job->client_id;
+        }
 
-        error_log("New message from user $newMessage->user_id, notification to user $id");
-        $notification = Notification::firstOrNew(['type' => 'message', 'user_id' => $id, 'type_id' => $newMessage->job_id]);
+        $notification = Notification::firstOrNew(['type' => 'message', 'user_id' => $recipientID, 'type_id' => $newMessage->job_id]);
         if(isset($notification->id)){//Entry exists
             $notification->increment('count');
         }
-        else{
+        else{//New entry
             $notification->url = "";
             $notification->count = 1;
         }
-        
-        $notification->text = "A.Ventura : $notification->count nouveaux messages";
+
+        $emitterUser = User::find($emitterID);
+        $notification->text = "$emitterUser->name : $notification->count nouveaux messages";
         $notification->save();
+
+        broadcast(new NotificationEvent($notification))->toOthers();
+        broadcast(new MessageEvent($newMessage, $recipientID))->toOthers();
         
         return $newMessage;
     }
