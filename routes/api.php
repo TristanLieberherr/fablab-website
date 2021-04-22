@@ -6,6 +6,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,13 +20,13 @@ use App\Http\Controllers\LoginController;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+  return $request->user();
 });
 
 Route::post('/user/login', [LoginController::class, 'login']);
 Route::post('/user/logout', [LoginController::class, 'logout']); 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('/login/{id}', function (Request $request, $id) { Auth::loginUsingId($id); return Auth::user(); }); 
+  Route::get('/login/{id}', function (Request $request, $id) { Auth::loginUsingId($id); return Auth::user(); }); 
     
 });
 
@@ -33,19 +34,24 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/jobs/{id}', [JobController::class, 'index']);
     Route::prefix('/job')->group(function () { 
-        Route::post('/store', [JobController::class, 'store']);
-        Route::post('/update/{id}', [JobController::class, 'update']);
-        Route::post('/destroy/{id}', [JobController::class, 'destroy']);
+      Route::post('/store', [JobController::class, 'store']);
+      Route::post('/update/{id}', [JobController::class, 'update']);
+      Route::post('/destroy/{id}', [JobController::class, 'destroy']);
     });
 
     Route::get('/messages/{id}', [MessageController::class, 'index']);
     Route::prefix('/message')->group(function () { 
-        Route::post('/store', [MessageController::class, 'store']);
+      Route::post('/store', [MessageController::class, 'store']);
     });
 
     Route::get('/notifications/{id}', [NotificationController::class, 'index']);
     Route::prefix('/notification')->group(function () { 
-        Route::post('/store', [NotificationController::class, 'store']);
-        Route::post('/destroy/{id}', [NotificationController::class, 'destroy']);
-    });   
+      Route::post('/store', [NotificationController::class, 'store']);
+      Route::post('/destroy/{id}', [NotificationController::class, 'destroy']);
+    });
+
+    Route::prefix('/file')->group(function () { 
+      Route::post('/store', [FileController::class, 'store']);
+      
+  });   
 });

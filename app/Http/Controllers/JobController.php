@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Events\NotificationEvent;
 use App\Events\JobEvent;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class JobController extends Controller
 {
@@ -53,11 +54,16 @@ class JobController extends Controller
     public function store(Request $request)
     {
         $newJob = new Job;
-        $newJob->client_id = $request->job['client_id'];
-        $newJob->job_type = $request->job['job_type'];
-        $newJob->deadline_date = $request->job['deadline_date'];
+        $newJob->client_id = $request->client_id;
+        $newJob->job_type = $request->job_type;
+        $newJob->deadline_date = $request->deadline_date;
         $newJob->status = "NEW";
         $newJob->save();
+        
+        foreach($request->uploadedFiles as $file){  //Moyen d'utiliser FileController et de passer $request? Héritage?
+          $file->storeAs('FileStorage', hash_file('sha256', $file));
+        }
+        
         return $newJob;
     }
 
