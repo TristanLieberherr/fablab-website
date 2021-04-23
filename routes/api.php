@@ -23,11 +23,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
+
 Route::post('/user/login', [LoginController::class, 'login']);
 Route::post('/user/logout', [LoginController::class, 'logout']); 
 Route::group(['middleware' => ['web']], function () {
-  Route::get('/login/{id}', function (Request $request, $id) { Auth::loginUsingId($id); return Auth::user(); }); 
-    
+  Route::get('/login/{id}', function (Request $request, $id) { Auth::loginUsingId($id); return Auth::user(); });    
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -51,7 +51,6 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::prefix('/file')->group(function () { 
-      Route::post('/store', [FileController::class, 'store']);
-      
+      Route::post('/store', [FileController::class, 'store']);    
   });   
 });

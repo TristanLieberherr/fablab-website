@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\File;
 
 class FileController extends Controller
 {
@@ -35,6 +37,12 @@ class FileController extends Controller
     public function store(Request $request)
     {
       foreach($request->uploadedFiles as $file){
+        $newFile = new File;
+        $newFile->hashed_name = hash_file('sha256', $file);
+        $newFile->name = $file->getClientOriginalName();
+        $newFile->extension = $file->getClientOriginalExtension();
+        $newFile->job_id = $request->job_id;
+        $newFile->save();
         $file->storeAs('FileStorage', hash_file('sha256', $file));
       }
     }

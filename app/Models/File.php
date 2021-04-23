@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class File extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
-        'text',
-        'url',
-        'type',
-        'type_id',
-        'count',
-    ];
+      'hashed_name',
+      'name',
+      'extension',
+      'job_id',
+  ];
 }

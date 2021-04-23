@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Job;
 use App\Models\Notification;
 use App\Models\User;
+use App\Models\File;
 use App\Events\NotificationEvent;
 use App\Events\JobEvent;
 use Illuminate\Support\Facades\Auth;
@@ -21,18 +22,16 @@ class JobController extends Controller
     public function index($id)
     {
         if($id == 0){
-          return Job::all();
+          $jobs = Job::all();
         }
-        else
-        {
-          $user = User::find($id);
-          if($user->isTechnician){
-            return Job::where('technician_id', $id)->get();
-          }
-          else{
-            return Job::where('client_id', $id)->get();
-          }     
+        else{
+          $jobs = User::find($id)->is_technician ? Job::where('technician_id', $id)->get() : Job::where('client_id', $id)->get();   
         }
+
+        foreach($jobs as $job){
+          $job->files = File::where('job_id', $job->id)->get();
+        }
+        return $jobs;
     }
 
     /**
@@ -61,6 +60,12 @@ class JobController extends Controller
         $newJob->save();
         
         foreach($request->uploadedFiles as $file){  //Moyen d'utiliser FileController et de passer $request? Héritage?
+          $newFile = new File;
+          $newFile->hashed_name = hash_file('sha256', $file);
+          $newFile->name = $file->getClientOriginalName();
+          $newFile->extension = $file->getClientOriginalExtension();
+          $newFile->job_id = $newJob->id;
+          $newFile->save();
           $file->storeAs('FileStorage', hash_file('sha256', $file));
         }
         
