@@ -13,13 +13,16 @@ class CreateNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->integer('user_id');
-            $table->string('text');
-            $table->string('url');
-        });
+      Schema::create('notifications', function (Blueprint $table) {
+        $table->id();
+        $table->integer('user_id');
+        $table->string('text');
+        $table->string('type');
+        $table->integer('type_id');
+        $table->integer('count');
+        $table->timestamps();
+        //$table->softDeletes();
+      });
     }
 
     /**
@@ -29,6 +32,8 @@ class CreateNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifications');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+      Schema::dropIfExists('notifications');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
     }
 }

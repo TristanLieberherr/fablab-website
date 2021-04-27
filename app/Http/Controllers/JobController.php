@@ -55,18 +55,18 @@ class JobController extends Controller
         $newJob = new Job;
         $newJob->client_id = $request->client_id;
         $newJob->job_type = $request->job_type;
-        $newJob->deadline_date = $request->deadline_date;
-        $newJob->status = "NEW";
+        $newJob->deadline = $request->deadline;
         $newJob->save();
-        
-        foreach($request->uploadedFiles as $file){  //Moyen d'utiliser FileController et de passer $request? Héritage?
-          $newFile = new File;
-          $newFile->hashed_name = hash_file('sha256', $file);
-          $newFile->name = $file->getClientOriginalName();
-          $newFile->extension = $file->getClientOriginalExtension();
-          $newFile->job_id = $newJob->id;
-          $newFile->save();
-          $file->storeAs('FileStorage', hash_file('sha256', $file));
+
+        if(isset($request->uploadedFiles)){
+          foreach($request->uploadedFiles as $file){  //Moyen d'utiliser FileController et de passer $request? Héritage?
+            $newFile = new File;
+            $newFile->hashed_name = hash_file('sha256', $file);
+            $newFile->name = $file->getClientOriginalName();
+            $newFile->job_id = $newJob->id;
+            $newFile->save();
+            $file->storeAs('FileStorage', hash_file('sha256', $file));
+          }
         }
         
         return $newJob;
@@ -123,7 +123,6 @@ class JobController extends Controller
             }
             else{//New entry
                 $notification->user_id = $job->client_id;
-                $notification->url = "";
                 $notification->type_id = 0;
                 $notification->count = 1;
             }

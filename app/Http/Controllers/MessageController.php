@@ -45,7 +45,7 @@ class MessageController extends Controller
         $newMessage->job_id = $request->job_id;
         $newMessage->text = $request->text;
         $newMessage->save();
-
+        
         $job = Job::find($newMessage->job_id);
         if($newMessage->user_id == $job->client_id){
             $emitterID = $job->client_id;
@@ -61,7 +61,6 @@ class MessageController extends Controller
             $notification->increment('count');
         }
         else{//New entry
-            $notification->url = "";
             $notification->count = 1;
         }
 

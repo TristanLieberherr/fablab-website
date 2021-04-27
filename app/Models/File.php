@@ -9,9 +9,8 @@ class File extends Model
 {
     use HasFactory;
     protected $fillable = [
-      'hashed_name',
-      'name',
-      'extension',
       'job_id',
+      'hashed_name',
+      'name'
   ];
 }

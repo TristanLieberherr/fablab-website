@@ -13,15 +13,21 @@ class CreateJobsTable extends Migration
      */
     public function up()
     {
-        Schema::create('jobs', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->integer('client_id');
-            $table->integer('technician_id');
-            $table->string('job_type');
-            $table->string('status');
-            $table->string('deadline_date');
-        });
+      Schema::create('jobs', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('client_id');
+        $table->unsignedBigInteger('technician_id')->nullable();
+        $table->string('job_type');
+        $table->text('description')->nullable();
+        $table->enum('status', ['new','on-hold','completed','ongoing'])->default('new');
+        $table->boolean('status_alert')->default(false);
+        $table->string('deadline');
+        $table->timestamps();
+
+        $table->foreign('client_id')->references('id')->on('users');
+        $table->foreign('technician_id')->references('id')->on('users');
+        //$table->softDeletes();
+      });
     }
 
     /**
@@ -31,6 +37,8 @@ class CreateJobsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jobs');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+      Schema::dropIfExists('jobs');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
     }
 }
