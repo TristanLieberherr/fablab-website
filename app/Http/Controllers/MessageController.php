@@ -7,8 +7,11 @@ use App\Models\Message;
 use App\Models\Notification;
 use App\Models\Job;
 use App\Models\User;
-use App\Events\NotificationEvent;
-use App\Events\MessageEvent;
+use App\Models\TimelineEvent;
+
+//use App\Events\NotificationEvent;
+use App\Events\MessagePusherEvent;
+
 
 class MessageController extends Controller
 {
@@ -19,7 +22,7 @@ class MessageController extends Controller
      */
     public function index($id)
     {
-        return Message::where('job_id', $id)->get();
+      return Message::where('job_id', $id)->get();
     }
 
     /**
@@ -40,38 +43,50 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        $newMessage = new Message;
-        $newMessage->user_id = $request->user_id;
-        $newMessage->job_id = $request->job_id;
-        $newMessage->text = $request->text;
-        $newMessage->save();
+      $newMessage = new Message;
+      $newMessage->user_id = $request->user_id;
+      $newMessage->job_id = $request->job_id;
+      $newMessage->text = $request->text;
+      $newMessage->save();
+      
+      $job = Job::find($newMessage->job_id);
+
+      $recipientID = $newMessage->user_id == $job->client_id ? $job->technician_id : $job->client_id;
+      broadcast(new MessagePusherEvent($newMessage, $recipientID))->toOthers();
+
+      /*$newTimelineEvent = new TimelineEvent;
+      $newTimelineEvent->job_id = $job->id;
+      $newTimelineEvent->type = "message";
+      $newTimelineEvent->data = "";
+      $newTimelineEvent->notify_user = true;
+      $newTimelineEvent->save();*/
         
-        $job = Job::find($newMessage->job_id);
-        if($newMessage->user_id == $job->client_id){
-            $emitterID = $job->client_id;
-            $recipientID = $job->technician_id;
-        }
-        elseif($newMessage->user_id == $job->technician_id){
-          $emitterID = $job->technician_id;
-          $recipientID = $job->client_id;
-        }
+      
+      /*if($newMessage->user_id == $job->client_id){
+          $emitterID = $job->client_id;
+          $recipientID = $job->technician_id;
+      }
+      elseif($newMessage->user_id == $job->technician_id){
+        $emitterID = $job->technician_id;
+        $recipientID = $job->client_id;
+      }
 
-        $notification = Notification::firstOrNew(['type' => 'message', 'user_id' => $recipientID, 'type_id' => $newMessage->job_id]);
-        if(isset($notification->id)){//Entry exists
-            $notification->increment('count');
-        }
-        else{//New entry
-            $notification->count = 1;
-        }
+      $notification = Notification::firstOrNew(['type' => 'message', 'user_id' => $recipientID, 'type_id' => $newMessage->job_id]);
+      if(isset($notification->id)){//Entry exists
+          $notification->increment('count');
+      }
+      else{//New entry
+          $notification->count = 1;
+      }
 
-        $emitterUser = User::find($emitterID);
-        $notification->text = "$emitterUser->name : $notification->count nouveaux messages";
-        $notification->save();
+      $emitterUser = User::find($emitterID);
+      $notification->text = "$emitterUser->name : $notification->count nouveaux messages";
+      $notification->save();
 
-        broadcast(new NotificationEvent($notification))->toOthers();
-        broadcast(new MessageEvent($newMessage, $recipientID))->toOthers();
-        
-        return $newMessage;
+      broadcast(new NotificationEvent($notification))->toOthers();
+      broadcast(new MessageEvent($newMessage, $recipientID))->toOthers();*/
+      
+      return $newMessage;
     }
 
     /**

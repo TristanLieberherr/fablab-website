@@ -5,16 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Job extends Model
+class TimelineEvent extends Model
 {
     use HasFactory;
     protected $fillable = [
-      'client_id',
-      'technician_id',
-      'job_type',
-      'description',
-      'status',
-      'status_alert',
-      'deadline'
-    ];
+      'job_id',
+      'type',
+      'notify_user',
+      'data'
+  ];
 }

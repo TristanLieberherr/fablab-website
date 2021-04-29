@@ -7,6 +7,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\TimelineEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,25 +33,30 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('/jobs/{id}', [JobController::class, 'index']);
-    Route::prefix('/job')->group(function () { 
-      Route::post('/store', [JobController::class, 'store']);
-      Route::post('/update/{id}', [JobController::class, 'update']);
-      Route::post('/destroy/{id}', [JobController::class, 'destroy']);
-    });
+  Route::get('/jobs/{id}', [JobController::class, 'index']);
+  Route::prefix('/job')->group(function () { 
+    Route::post('/store', [JobController::class, 'store']);
+    Route::post('/update-status/{id}', [JobController::class, 'updateStatus']);
+    Route::post('/update-status_alert/{id}', [JobController::class, 'updateStatusAlert']);
+    Route::post('/destroy/{id}', [JobController::class, 'destroy']);
+  });
 
-    Route::get('/messages/{id}', [MessageController::class, 'index']);
-    Route::prefix('/message')->group(function () { 
-      Route::post('/store', [MessageController::class, 'store']);
-    });
+  Route::get('/messages/{id}', [MessageController::class, 'index']);
+  Route::prefix('/message')->group(function () { 
+    Route::post('/store', [MessageController::class, 'store']);
+  });
 
-    Route::get('/notifications/{id}', [NotificationController::class, 'index']);
-    Route::prefix('/notification')->group(function () { 
-      Route::post('/store', [NotificationController::class, 'store']);
-      Route::post('/destroy/{id}', [NotificationController::class, 'destroy']);
-    });
+  Route::get('/notifications/{id}', [NotificationController::class, 'index']);
+  Route::prefix('/notification')->group(function () { 
+    Route::post('/store', [NotificationController::class, 'store']);
+    Route::post('/destroy/{id}', [NotificationController::class, 'destroy']);
+  });
 
-    Route::prefix('/file')->group(function () { 
-      Route::post('/store', [FileController::class, 'store']);    
-  });   
+  Route::prefix('/file')->group(function () { 
+    Route::post('/store', [FileController::class, 'store']);    
+  });
+
+  Route::prefix('/timeline-event')->group(function () { 
+    Route::post('/store', [TimelineEventController::class, 'store']);    
+  }); 
 });

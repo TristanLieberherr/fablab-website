@@ -28,3 +28,7 @@ Broadcast::channel('message.channel.{id}', function ($user, $id) {
 Broadcast::channel('job.channel.{id}', function ($user, $id) {
   return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('timeline.channel.{id}', function ($user, $id) {
+  return (int) $user->id === (int) $id;
+});

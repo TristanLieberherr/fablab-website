@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-
-use App\Models\File;
 use App\Models\TimelineEvent;
+use Illuminate\Http\Request;
 
-class FileController extends Controller
+class TimelineEventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,32 +35,20 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-      foreach($request->uploadedFiles as $file){
-        $newFile = new File;
-        $newFile->hashed_name = hash_file('sha256', $file);
-        $newFile->name = $file->getClientOriginalName();
-        $newFile->job_id = $request->job_id;
-        $newFile->save();
-        $file->storeAs('FileStorage', hash_file('sha256', $file));
-        
-        $newTimelineEvent = new TimelineEvent;
-        $newTimelineEvent->job_id = $newFile->job_id;
-        $newTimelineEvent->type = "file";
-        $newTimelineEvent->data = $newFile->name;
-        $newTimelineEvent->save();
-
-      }
-
-      
+      $newTimelineEvent = new TimelineEvent;
+      $newTimelineEvent->job_id = $request->job_id;
+      $newTimelineEvent->type = $request->type;
+      $newTimelineEvent->save();
+      return $newTimelineEvent;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\TimelineEvent  $timelineEvent
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(TimelineEvent $timelineEvent)
     {
         //
     }
@@ -71,10 +56,10 @@ class FileController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\TimelineEvent  $timelineEvent
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(TimelineEvent $timelineEvent)
     {
         //
     }
@@ -83,10 +68,10 @@ class FileController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\TimelineEvent  $timelineEvent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, TimelineEvent $timelineEvent)
     {
         //
     }
@@ -94,10 +79,10 @@ class FileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\TimelineEvent  $timelineEvent
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(TimelineEvent $timelineEvent)
     {
         //
     }

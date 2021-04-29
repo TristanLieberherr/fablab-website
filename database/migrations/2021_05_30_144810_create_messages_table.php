@@ -21,7 +21,7 @@ class CreateMessagesTable extends Migration
         $table->timestamps();
 
         $table->foreign('user_id')->references('id')->on('users');
-        $table->foreign('job_id')->references('id')->on('jobs');
+        $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
         //$table->softDeletes();
       });
     }
@@ -33,8 +33,8 @@ class CreateMessagesTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::dropIfExists('messages');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+      Schema::dropIfExists('messages');
+      DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

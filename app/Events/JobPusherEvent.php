@@ -9,23 +9,24 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Message;
-use App\Models\Job;
 
-class MessageEvent implements ShouldBroadcast
+use App\Models\Job;
+use App\Models\TimelineEvent;
+
+class JobPusherEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+    public $job;
     public $id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message, $id)
+    public function __construct($job, $id)
     {
-      $this->message = $message;
+      $this->job = $job;
       $this->id = $id;
     }
 
@@ -36,6 +37,6 @@ class MessageEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-      return new Channel('message.channel.'.$this->id);
+      return new Channel('job.channel.'.$this->id);
     }
 }
