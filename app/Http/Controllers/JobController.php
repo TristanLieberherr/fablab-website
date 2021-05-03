@@ -13,9 +13,7 @@ use App\Models\File;
 use App\Models\TimelineEvent;
 use App\Models\Message;
 
-//use App\Events\NotificationEvent;
 use App\Events\JobPusherEvent;
-use App\Events\TimelinePusherEvent;
 
 
 class JobController extends Controller
@@ -89,6 +87,8 @@ class JobController extends Controller
         }
       }
       
+      $newJob->files = File::where('job_id', $newJob->id);
+      $newJob->timeline = TimelineEvent::where('job_id', $newJob->id);
       return $newJob;
     }
 
@@ -125,65 +125,39 @@ class JobController extends Controller
     {
       $job = Job::find($id);
       $job->status = $request->status;
-      $job->status_alert = true;  //Notify the client
+      $job->notify_technician = true;
+      $job->notify_client = true;
       $job->save();
       
       $newTimelineEvent = new TimelineEvent;
       $newTimelineEvent->job_id = $job->id;
       $newTimelineEvent->type = "status";
       $newTimelineEvent->data = $request->status;
-      $newTimelineEvent->notify_user = true;
       $newTimelineEvent->save();
-      
-      broadcast(new JobPusherEvent($job, $job->client_id))->toOthers();
-      broadcast(new TimelinePusherEvent($newTimelineEvent, $job->client_id))->toOthers();
-      broadcast(new TimelinePusherEvent($newTimelineEvent, $job->technician_id))->toOthers();
 
-        
-        /*if($job->status_alert == false){
-            $job->status_alert = true;
-            $doIncrement = true;
-        }
-        else{
-            $doIncrement = false;
-        }
-        
-        
-        $notification = Notification::firstOrNew(['type' => 'job', 'user_id' => $job->client_id]);
-        if(isset($notification->id)){//Entry exists
-            if($doIncrement){
-                $notification->increment('count');
-            }
-        }
-        else{//New entry
-            $notification->user_id = $job->client_id;
-            $notification->type_id = 0;
-            $notification->count = 1;
-        }
-
-        $notification->text = "$notification->count Commandes ont été modifiées";
-        $notification->save();*/
-        //$job->save();
-
-        //broadcast(new NotificationEvent($notification))->toOthers();
-        //broadcast(new JobEvent($job, $job->client_id))->toOthers();
-        
-      
+      $timeline = array($newTimelineEvent); 
+      broadcast(new JobPusherEvent($job, $timeline, $job->client_id))->toOthers();
+      $job->timeline = $timeline;
       return $job;
     }
 
-    public function updateStatusAlert(Request $request, $id)
+    public function updateNotify(Request $request, $id)
     {
       $job = Job::find($id);
-      $job->status_alert = false;
+      $request->user()->is_technician ? $job->notify_technician = false : $job->notify_client = false;
       $job->save();
 
       $timelineEvents = TimelineEvent::where('job_id', $job->id)->get();
       foreach($timelineEvents as $event){
-        $event->notify_user = false;
+        $request->user()->is_technician ? $event->notify_technician = false : $event->notify_client = false;
         $event->save();
       }
-      
+      $messages = Message::where('job_id', $job->id)->where('user_id', $request->user()->id)->get();
+      foreach($messages as $message){
+        $message->notify = false;
+        $message->save(); 
+      }
+
       return $job;
     }
 

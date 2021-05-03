@@ -17,8 +17,9 @@ class CreateTimelineEventsTable extends Migration
           $table->id();
           $table->unsignedBigInteger('job_id');
           $table->enum('type', ['status', 'file', 'message']);
-          $table->boolean('notify_user')->default(false);
           $table->string('data')->nullable();
+          $table->boolean('notify_client')->default(true);
+          $table->boolean('notify_technician')->default(true);
           $table->timestamps();
   
           $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');

@@ -14,7 +14,8 @@ class Job extends Model
       'job_type',
       'description',
       'status',
-      'status_alert',
-      'deadline'
+      'deadline',
+      'notify_client',
+      'notify_technician'
     ];
 }

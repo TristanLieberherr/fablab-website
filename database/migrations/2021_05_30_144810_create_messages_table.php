@@ -18,6 +18,7 @@ class CreateMessagesTable extends Migration
         $table->unsignedBigInteger('user_id');
         $table->unsignedBigInteger('job_id');
         $table->text('text');
+        $table->boolean('notify')->default(true);
         $table->timestamps();
 
         $table->foreign('user_id')->references('id')->on('users');

@@ -11,7 +11,8 @@ class TimelineEvent extends Model
     protected $fillable = [
       'job_id',
       'type',
-      'notify_user',
-      'data'
+      'data',
+      'notify_client',
+      'notify_technician'
   ];
 }

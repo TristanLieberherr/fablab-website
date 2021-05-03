@@ -18,15 +18,17 @@ class JobPusherEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $job;
+    public $timeline;
     public $id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($job, $id)
+    public function __construct($job, $timeline, $id)
     {
       $this->job = $job;
+      $this->timeline = $timeline;
       $this->id = $id;
     }
 

@@ -20,8 +20,9 @@ class CreateJobsTable extends Migration
         $table->string('job_type');
         $table->text('description')->nullable();
         $table->enum('status', ['new','on-hold','completed','ongoing'])->default('new');
-        $table->boolean('status_alert')->default(false);
         $table->string('deadline');
+        $table->boolean('notify_client')->default(true);
+        $table->boolean('notify_technician')->default(true);
         $table->timestamps();
 
         $table->foreign('client_id')->references('id')->on('users');
