@@ -42,15 +42,19 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
+      $job = Job::find($request->job_id);
+      $request->user()->is_technician ? $job->notify_client = true : $job->notify_technician = true;
+      $job->save();
+
       $newMessage = new Message;
-      $newMessage->user_id = $request->user_id;
+      $newMessage->sender_id = $request->user()->id;
+      $newMessage->recipient_id = $request->user()->is_technician ? $job->client_id : $job->technician_id;
       $newMessage->job_id = $request->job_id;
       $newMessage->text = $request->text;
       $newMessage->save();
+      $newMessage = Message::find($newMessage->id);
       
-      $job = Job::find($newMessage->job_id);
-      $recipientID = $newMessage->user_id == $job->client_id ? $job->technician_id : $job->client_id;
-      broadcast(new MessagePusherEvent($newMessage, $recipientID))->toOthers();
+      broadcast(new MessagePusherEvent($newMessage))->toOthers();
       
       return $newMessage;
     }

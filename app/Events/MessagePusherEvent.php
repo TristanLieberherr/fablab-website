@@ -17,16 +17,14 @@ class MessagePusherEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-    public $id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message, $id)
+    public function __construct($message)
     {
       $this->message = $message;
-      $this->id = $id;
     }
 
     /**
@@ -36,6 +34,6 @@ class MessagePusherEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-      return new Channel('message.channel.'.$this->id);
+      return new Channel('message.channel.'.$this->message->recipient_id);
     }
 }

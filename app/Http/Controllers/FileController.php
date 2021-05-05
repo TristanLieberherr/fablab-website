@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\File;
+use App\Models\Job;
 use App\Models\TimelineEvent;
+
+use App\Events\JobPusherEvent;
 
 class FileController extends Controller
 {
@@ -37,24 +40,43 @@ class FileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    { 
+      $job = Job::find($request->job_id);
+      $job->notify_technician = true;
+      $job->save();
+      $tempFiles = Array();
+      $tempTimeline = Array();
+
       foreach($request->uploadedFiles as $file){
         $newFile = new File;
         $newFile->hashed_name = hash_file('sha256', $file);
         $newFile->name = $file->getClientOriginalName();
         $newFile->job_id = $request->job_id;
         $newFile->save();
+        $tempFiles[] = $newFile;
         $file->storeAs('FileStorage', hash_file('sha256', $file));
         
         $newTimelineEvent = new TimelineEvent;
         $newTimelineEvent->job_id = $newFile->job_id;
         $newTimelineEvent->type = "file";
         $newTimelineEvent->data = $newFile->name;
+        $newTimelineEvent->notify_client = false;
         $newTimelineEvent->save();
-
+        $tempTimeline[] = $newTimelineEvent;
       }
 
+      $job = Job::find($job->id);
+      broadcast(new JobPusherEvent($job, $tempTimeline, $tempFiles, $job->technician_id))->toOthers();
       
+      $job->files = $tempFiles;
+      $job->timeline = $tempTimeline;
+      return $job;
+    }
+
+    public function download($id)
+    {
+      $file = File::find($id);
+      return Storage::download("FileStorage/$file->hashed_name", $file->name);
     }
 
     /**

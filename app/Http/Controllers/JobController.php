@@ -63,6 +63,7 @@ class JobController extends Controller
       $newJob->job_type = $request->job_type;
       $newJob->deadline = $request->deadline;
       $newJob->save();
+      $newJob = Job::find($newJob->id);
       
       $newTimelineEvent = new TimelineEvent;
       $newTimelineEvent->job_id = $newJob->id;
@@ -87,8 +88,9 @@ class JobController extends Controller
         }
       }
       
-      $newJob->files = File::where('job_id', $newJob->id);
-      $newJob->timeline = TimelineEvent::where('job_id', $newJob->id);
+      $newJob->files = File::where('job_id', $newJob->id)->get();
+      $newJob->timeline = TimelineEvent::where('job_id', $newJob->id)->get();
+      $newJob->messages = [];
       return $newJob;
     }
 
@@ -125,18 +127,22 @@ class JobController extends Controller
     {
       $job = Job::find($id);
       $job->status = $request->status;
-      $job->notify_technician = true;
+      $job->notify_technician = false;
       $job->notify_client = true;
       $job->save();
+      $job = Job::find($job->id);
       
       $newTimelineEvent = new TimelineEvent;
       $newTimelineEvent->job_id = $job->id;
       $newTimelineEvent->type = "status";
       $newTimelineEvent->data = $request->status;
+      $newTimelineEvent->notify_technician = false;
+      $newTimelineEvent->notify_client = true;
       $newTimelineEvent->save();
+      $newTimelineEvent = TimelineEVent::find($newTimelineEvent->id);
 
       $timeline = array($newTimelineEvent); 
-      broadcast(new JobPusherEvent($job, $timeline, $job->client_id))->toOthers();
+      broadcast(new JobPusherEvent($job, $timeline, null, $job->client_id))->toOthers();
       $job->timeline = $timeline;
       return $job;
     }
@@ -146,13 +152,14 @@ class JobController extends Controller
       $job = Job::find($id);
       $request->user()->is_technician ? $job->notify_technician = false : $job->notify_client = false;
       $job->save();
+      $job = Job::find($job->id);
 
       $timelineEvents = TimelineEvent::where('job_id', $job->id)->get();
       foreach($timelineEvents as $event){
         $request->user()->is_technician ? $event->notify_technician = false : $event->notify_client = false;
         $event->save();
       }
-      $messages = Message::where('job_id', $job->id)->where('user_id', $request->user()->id)->get();
+      $messages = Message::where('job_id', $job->id)->where('recipient_id', $request->user()->id)->get();
       foreach($messages as $message){
         $message->notify = false;
         $message->save(); 

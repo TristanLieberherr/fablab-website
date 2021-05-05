@@ -11,6 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 use App\Models\Job;
+use App\Models\File;
 use App\Models\TimelineEvent;
 
 class JobPusherEvent implements ShouldBroadcast
@@ -19,16 +20,18 @@ class JobPusherEvent implements ShouldBroadcast
 
     public $job;
     public $timeline;
+    public $files;
     public $id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($job, $timeline, $id)
+    public function __construct($job, $timeline, $files, $id)
     {
       $this->job = $job;
       $this->timeline = $timeline;
+      $this->files = $files;
       $this->id = $id;
     }
 

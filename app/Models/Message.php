@@ -9,9 +9,10 @@ class Message extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
-        'job_id',
-        'text',
-        'notify'
+      'sender_id',
+      'recipient_id',
+      'job_id',
+      'text',
+      'notify'
     ];
 }

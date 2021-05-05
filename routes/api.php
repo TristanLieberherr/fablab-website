@@ -53,7 +53,8 @@ Route::group(['middleware' => ['auth']], function () {
   });
 
   Route::prefix('/file')->group(function () { 
-    Route::post('/store', [FileController::class, 'store']);    
+    Route::post('/store', [FileController::class, 'store']);
+    Route::get('/download/{id}', [FileController::class, 'download']);
   });
 
   Route::prefix('/timeline-event')->group(function () { 
