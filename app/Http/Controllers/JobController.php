@@ -26,7 +26,7 @@ class JobController extends Controller
     public function index($id)
     {
       if($id == 0){
-        $jobs = Job::all();
+        $jobs = Job::where('technician_id', null)->get();
       }
       else{
         $jobs = User::find($id)->is_technician ? Job::where('technician_id', $id)->get() : Job::where('client_id', $id)->get();   
@@ -141,7 +141,7 @@ class JobController extends Controller
       $newTimelineEvent->save();
       $newTimelineEvent = TimelineEVent::find($newTimelineEvent->id);
 
-      $timeline = array($newTimelineEvent); 
+      $timeline = array($newTimelineEvent);
       broadcast(new JobPusherEvent($job, $timeline, null, $job->client_id))->toOthers();
       $job->timeline = $timeline;
       return $job;
@@ -165,6 +165,31 @@ class JobController extends Controller
         $message->save(); 
       }
 
+      return $job;
+    }
+
+    public function assign(Request $request, $id)
+    {
+      $job = Job::find($id);
+      $job->technician_id = $request->user()->id;
+      $job->status = "assigned";
+      $job->notify_technician = true;
+      $job->notify_client = true;
+      $job->save();
+      $job = Job::find($job->id);
+
+      $newTimelineEvent = new TimelineEvent;
+      $newTimelineEvent->job_id = $job->id;
+      $newTimelineEvent->type = "status";
+      $newTimelineEvent->data = $job->status;
+      $newTimelineEvent->notify_technician = true;
+      $newTimelineEvent->notify_client = true;
+      $newTimelineEvent->save();
+      $newTimelineEvent = TimelineEVent::find($newTimelineEvent->id);
+
+      $timeline = array($newTimelineEvent);
+      broadcast(new JobPusherEvent($job, $timeline, null, $job->client_id))->toOthers();
+      $job->timeline = $timeline;
       return $job;
     }
 

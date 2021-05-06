@@ -19,7 +19,7 @@ class CreateJobsTable extends Migration
         $table->unsignedBigInteger('technician_id')->nullable();
         $table->string('job_type');
         $table->text('description')->nullable();
-        $table->enum('status', ['new','on-hold','completed','ongoing'])->default('new');
+        $table->enum('status', ['new', 'assigned', 'ongoing', 'on-hold','completed'])->default('new');
         $table->string('deadline');
         $table->boolean('notify_client')->default(true);
         $table->boolean('notify_technician')->default(true);
