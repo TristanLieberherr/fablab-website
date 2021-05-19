@@ -87,7 +87,7 @@ class JobController extends Controller
       }
     }
 
-    broadcast(new JobPusherEvent($newJob, null, null, 0))->toOthers();
+    broadcast(new JobPusherEvent($newJob, 0))->toOthers();
     $newJob->files = File::where('job_id', $newJob->id)->get();
     $newJob->timeline = TimelineEvent::where('job_id', $newJob->id)->get();
     $newJob->messages = [];
@@ -142,8 +142,8 @@ class JobController extends Controller
     $newTimelineEvent = TimelineEVent::find($newTimelineEvent->id);
 
     $timeline = array($newTimelineEvent);
-    broadcast(new JobPusherEvent($job, $timeline, null, $job->client_id))->toOthers();
     $job->timeline = $timeline;
+    broadcast(new JobPusherEvent($job, $job->client_id))->toOthers();
     return $job;
   }
 
@@ -168,31 +168,42 @@ class JobController extends Controller
     return $job;
   }
 
-  public function assign(Request $request, $id)
-  {
-    $job = Job::find($id);
-    $job->technician_id = $request->user()->id;
-    $job->status = "assigned";
-    $job->notify_technician = true;
-    $job->notify_client = true;
-    $job->save();
-    $job = Job::find($job->id);
+  public function assign(Request $request)
+  { 
+    $jobArray = array();
+    foreach ($request->idArray as $id) {
+      $job = Job::find($id);
+      if(is_null($job->technician_id)){
+        $job->technician_id = $request->user()->id;
+        $job->status = "assigned";
+        $job->notify_technician = true;
+        $job->notify_client = true;
+        $job->save();
+        $job = Job::find($job->id);
+    
+        $newTimelineEvent = new TimelineEvent;
+        $newTimelineEvent->job_id = $job->id;
+        $newTimelineEvent->type = "status";
+        $newTimelineEvent->data = $job->status;
+        $newTimelineEvent->notify_technician = true;
+        $newTimelineEvent->notify_client = true;
+        $newTimelineEvent->save();
+        $newTimelineEvent = TimelineEvent::find($newTimelineEvent->id);
+  
+        broadcast(new JobPusherEvent($job, 0))->toOthers();
+        $job->timeline = array($newTimelineEvent);
+        broadcast(new JobPusherEvent($job, $job->client_id))->toOthers();
+        array_push($jobArray, $job);
+      }
+    }
 
-    $newTimelineEvent = new TimelineEvent;
-    $newTimelineEvent->job_id = $job->id;
-    $newTimelineEvent->type = "status";
-    $newTimelineEvent->data = $job->status;
-    $newTimelineEvent->notify_technician = true;
-    $newTimelineEvent->notify_client = true;
-    $newTimelineEvent->save();
-    $newTimelineEvent = TimelineEVent::find($newTimelineEvent->id);
-
-    broadcast(new JobPusherEvent($job, array($newTimelineEvent), null, $job->client_id))->toOthers();
-    broadcast(new JobPusherEvent($job, null, null, 0))->toOthers();
-    $job->files = File::where('job_id', $job->id)->get();
-    $job->timeline = TimelineEvent::where('job_id', $job->id)->get();
-    $job->messages = [];
-    return $job;
+    
+    foreach ($jobArray as $job){
+      $job->files = File::where('job_id', $job->id)->get();
+      $job->timeline = TimelineEvent::where('job_id', $job->id)->get();
+      $job->messages = [];
+    }
+    return $jobArray;
   }
 
   /**
