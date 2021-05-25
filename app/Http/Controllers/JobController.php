@@ -27,7 +27,7 @@ class JobController extends Controller
     if ($id == 0) {
       $jobs = Job::where('technician_id', null)->get();
     } else {
-      $jobs = User::find($id)->is_technician ? Job::where('technician_id', $id)->get() : Job::where('client_id', $id)->get();
+      $jobs = User::find($id)->is_technician ? Job::where('technician_id', $id)->orWhere('client_id', $id)->get() : Job::where('client_id', $id)->get();
     }
 
     foreach ($jobs as $job) {

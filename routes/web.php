@@ -12,11 +12,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
+Route::any('{all}', function () {
+  if (Auth::user()) {
     return view('welcome');
-});
+  }
+  return view('login');
+})->where('all', '^(?!api|prout).*$');
 
-Route::get('/login', function () {
-    Auth::loginUsingId(1, true); return Auth::user();
+
+Route::any('/prout', function() {
+  return Auth::user();
 });

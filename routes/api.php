@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\TimelineEventController;
 
@@ -20,18 +20,26 @@ use App\Http\Controllers\TimelineEventController;
 |
 */
 
+//<useless>
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
-
-
-Route::post('/user/login', [LoginController::class, 'login']);
-Route::post('/user/logout', [LoginController::class, 'logout']); 
 Route::group(['middleware' => ['web']], function () {
   Route::get('/login/{id}', function (Request $request, $id) { Auth::loginUsingId($id); return Auth::user(); });    
 });
+//</useless>
+
+Route::prefix('/user')->group(function () {
+  Route::post('/login', [UserController::class, 'login']);
+  Route::post('/logout', [UserController::class, 'logout']);
+});
 
 Route::group(['middleware' => ['auth']], function () {
+
+  Route::prefix('/user')->group(function () {
+    Route::get('/retrieve', function() { return Auth::user(); });
+    Route::post('/update-settings', [UserController::class, 'updateSettings']);
+  });
 
   Route::get('/jobs/{id}', [JobController::class, 'index']);
   Route::prefix('/job')->group(function () { 

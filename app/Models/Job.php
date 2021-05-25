@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-    use HasFactory;
-    protected $fillable = [
-      'client_id',
-      'technician_id',
-      'job_type',
-      'description',
-      'status',
-      'deadline',
-      'notify_client',
-      'notify_technician'
-    ];
+  use HasFactory;
+  protected $fillable = [
+    'client_id',
+    'technician_id',
+    'job_type',
+    'description',
+    'status',
+    'deadline',
+    'notify_client',
+    'notify_technician'
+  ];
 }
