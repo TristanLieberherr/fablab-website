@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
 
       $table->boolean('notify_email_status')->default(true);
       $table->boolean('notify_email_messages')->default(true);
+      $table->boolean('notify_email_files')->default(true);
 
       $table->rememberToken();
       $table->timestamps();

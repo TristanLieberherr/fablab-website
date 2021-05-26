@@ -31,7 +31,7 @@ class UserController extends Controller
       $user[$field["name"]] = $field["value"];
     }
     $user->save();
-
+    
     return $user;
   } 
 

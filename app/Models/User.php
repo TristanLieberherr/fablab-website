@@ -24,7 +24,8 @@ class User extends Authenticatable
     'is_technician',
     
     'notify_email_status',
-    'notify_email_messages'
+    'notify_email_messages',
+    'notify_email_files'
   ];
 
   /**
