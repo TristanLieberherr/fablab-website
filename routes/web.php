@@ -13,10 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::any('{all}', function () {
-  if (Auth::user()) {
+  /*if (Auth::user()) {
     return view('welcome');
   }
-  return view('login');
+  return view('login');*/
+  return view('welcome');
 })->where('all', '^(?!api|prout).*$');
 
 

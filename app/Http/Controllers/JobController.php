@@ -189,7 +189,7 @@ class JobController extends Controller
         $newTimelineEvent->notify_client = true;
         $newTimelineEvent->save();
         $newTimelineEvent = TimelineEvent::find($newTimelineEvent->id);
-  
+        
         broadcast(new JobPusherEvent($job, 0))->toOthers();
         $job->timeline = array($newTimelineEvent);
         broadcast(new JobPusherEvent($job, $job->client_id))->toOthers();

@@ -4,13 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,shrink-to-fit=no">
-  <meta name="user" content="{{ Auth::user() }}">
   <link rel="stylesheet" href="/assets/fonts/simple-line-icons/css/simple-line-icons.css">
   <link rel="stylesheet" href="/assets/fonts/iconsmind-s/css/iconsminds.css">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-  <title>Salut</title>
+  <title>FabLab HEIG</title>
   <style>
     .loading {
       display: inline-block;
@@ -48,11 +44,11 @@
       }
     }
   </style>
-  <link href="/assets/css/chunk-vendors.63553963.css" rel="preload" as="style">
+  <link href="/assets/css/chunk-vendors.446e919b.css" rel="preload" as="style">
   <link href="/assets/css/index.2b37fa2c.css" rel="preload" as="style">
-  <link href="/assets/js/chunk-vendors.f338542b.js" rel="preload" as="script">
-  <link href="/assets/js/index.e8d0178a.js" rel="preload" as="script">
-  <link href="/assets/css/chunk-vendors.63553963.css" rel="stylesheet">
+  <link href="/assets/js/chunk-vendors.bbdb3649.js" rel="preload" as="script">
+  <link href="/assets/js/index.5d078818.js" rel="preload" as="script">
+  <link href="/assets/css/chunk-vendors.446e919b.css" rel="stylesheet">
   <link href="/assets/css/index.2b37fa2c.css" rel="stylesheet">
 </head>
 
@@ -60,8 +56,8 @@
   <div id="app">
     <div class="loading"></div>
   </div>
-  <script src="/assets/js/chunk-vendors.f338542b.js"></script>
-  <script src="/assets/js/index.e8d0178a.js"></script>
+  <script src="/assets/js/chunk-vendors.bbdb3649.js"></script>
+  <script src="/assets/js/index.5d078818.js"></script>
 </body>
 
 </html>
