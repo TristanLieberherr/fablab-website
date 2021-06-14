@@ -16,7 +16,7 @@ class CreateTimelineEventsTable extends Migration
         Schema::create('timeline_events', function (Blueprint $table) {
           $table->id();
           $table->unsignedBigInteger('job_id');
-          $table->enum('type', ['status', 'file', 'message']);
+          $table->enum('type', ['status', 'file']);
           $table->string('data')->nullable();
           $table->boolean('notify_client')->default(true);
           $table->boolean('notify_technician')->default(true);

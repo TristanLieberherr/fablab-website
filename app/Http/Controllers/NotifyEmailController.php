@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 use App\Mail\NotifyEmail;
+use App\Jobs\NotifyEmailJob;
 
 class NotifyEmailController extends Controller
 {
-  public function send(Request $request)
+  public function send($id)
   {
-    //Mail::to('test@example.com')->later(now()->addMinutes(1), new NotifyEmail);
-    Mail::to('test@example.com')->send(new NotifyEmail);
+    NotifyEmailJob::dispatch($id)->delay(now()->addMinutes(1));
   }
 }

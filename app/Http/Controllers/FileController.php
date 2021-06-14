@@ -66,10 +66,10 @@ class FileController extends Controller
       }
 
       $job = Job::find($job->id);
-      broadcast(new JobPusherEvent($job, $tempTimeline, $tempFiles, $job->technician_id))->toOthers();
-      
       $job->files = $tempFiles;
       $job->timeline = $tempTimeline;
+
+      broadcast(new JobPusherEvent($job, $job->technician_id))->toOthers();
       return $job;
     }
 
