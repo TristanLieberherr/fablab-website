@@ -35,6 +35,7 @@ class JobController extends Controller
       $job->timeline = TimelineEvent::where('job_id', $job->id)->get();
       $job->messages = Message::where('job_id', $job->id)->get();
     }
+
     return $jobs;
   }
 
@@ -56,11 +57,14 @@ class JobController extends Controller
    */
   public function store(Request $request)
   {
+    $user = $request->user();
     $newJob = new Job;
     $newJob->client_id = $request->client_id;
     $newJob->job_type = $request->job_type;
     $newJob->deadline = $request->deadline;
     $newJob->description = $request->description;
+    $newJob->client_name = $user->name;
+    $newJob->client_surname = $user->surname;
     $newJob->save();
     $newJob = Job::find($newJob->id);
 
@@ -91,6 +95,7 @@ class JobController extends Controller
     $newJob->files = File::where('job_id', $newJob->id)->get();
     $newJob->timeline = TimelineEvent::where('job_id', $newJob->id)->get();
     $newJob->messages = [];
+
     return $newJob;
   }
 
@@ -144,6 +149,7 @@ class JobController extends Controller
     $timeline = array($newTimelineEvent);
     $job->timeline = $timeline;
     broadcast(new JobPusherEvent($job, $job->client_id))->toOthers();
+
     return $job;
   }
 
@@ -170,14 +176,17 @@ class JobController extends Controller
 
   public function assign(Request $request)
   { 
+    $user = $request->user();
     $jobArray = array();
     foreach ($request->idArray as $id) {
       $job = Job::find($id);
       if(is_null($job->technician_id)){
-        $job->technician_id = $request->user()->id;
+        $job->technician_id = $user->id;
         $job->status = "assigned";
         $job->notify_technician = true;
         $job->notify_client = true;
+        $job->technician_name = $user->name;
+        $job->technician_surname = $user->surname;
         $job->save();
         $job = Job::find($job->id);
     
@@ -196,13 +205,13 @@ class JobController extends Controller
         array_push($jobArray, $job);
       }
     }
-
     
     foreach ($jobArray as $job){
       $job->files = File::where('job_id', $job->id)->get();
       $job->timeline = TimelineEvent::where('job_id', $job->id)->get();
       $job->messages = [];
     }
+
     return $jobArray;
   }
 
@@ -216,6 +225,7 @@ class JobController extends Controller
   {
     $job = Job::find($id);
     $job->delete();
+
     return $id;
   }
 }

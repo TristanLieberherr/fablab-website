@@ -23,6 +23,10 @@ class CreateJobsTable extends Migration
         $table->string('deadline');
         $table->boolean('notify_client')->default(true);
         $table->boolean('notify_technician')->default(true);
+        $table->string('client_name');
+        $table->string('client_surname');
+        $table->string('technician_name')->nullable();
+        $table->string('technician_surname')->nullable();
         $table->timestamps();
 
         $table->foreign('client_id')->references('id')->on('users');

@@ -28,15 +28,15 @@ class DatabaseSeeder extends Seeder
       'password' => bcrypt('password'),
     ]);
       User::insert([
-      'name' => '1',
-      'surname' => 'Tech',
+      'name' => 'Bravo',
+      'surname' => 'Johnny',
       'email' => 'tech',
       'is_technician' => true,
       'password' => bcrypt('password'),
     ]);
     User::insert([
-      'name' => '2',
-      'surname' => 'Tech',
+      'name' => 'Ventura',
+      'surname' => 'Ace',
       'email' => 'tech2',
       'is_technician' => true,
       'password' => bcrypt('password'),
