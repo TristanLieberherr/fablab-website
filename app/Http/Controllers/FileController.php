@@ -43,6 +43,7 @@ class FileController extends Controller
     { 
       $job = Job::find($request->job_id);
       $job->notify_technician = true;
+      //$job->notify_client = true;
       $job->save();
       $tempFiles = Array();
       $tempTimeline = Array();
@@ -60,7 +61,6 @@ class FileController extends Controller
         $newTimelineEvent->job_id = $newFile->job_id;
         $newTimelineEvent->type = "file";
         $newTimelineEvent->data = $newFile->name;
-        $newTimelineEvent->notify_client = false;
         $newTimelineEvent->save();
         $tempTimeline[] = $newTimelineEvent;
       }

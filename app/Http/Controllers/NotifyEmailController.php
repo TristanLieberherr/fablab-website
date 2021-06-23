@@ -11,8 +11,9 @@ use App\Jobs\NotifyEmailJob;
 
 class NotifyEmailController extends Controller
 {
-  public function send($id)
+  public function dispatchMailJob($id)
   {
-    NotifyEmailJob::dispatch($id)->delay(now()->addMinutes(1));
+    //NotifyEmailJob::dispatch($id)->delay(now()->addMinutes(1));
+    NotifyEmailJob::dispatch($id)->delay(now()->addSeconds(10));
   }
 }

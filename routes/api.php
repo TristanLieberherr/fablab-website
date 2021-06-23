@@ -27,7 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['web']], function () {
   Route::get('/login/{id}', function (Request $request, $id) { Auth::loginUsingId($id); return Auth::user(); });    
 });
-Route::get('/email/{id}', [App\Http\Controllers\NotifyEmailController::class, 'send']);
+Route::get('/email/{id}', [App\Http\Controllers\NotifyEmailController::class, 'dispatchMailJob']);
 //</useless>
 
 Route::prefix('/user')->group(function () {
