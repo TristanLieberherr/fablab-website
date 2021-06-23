@@ -42,7 +42,7 @@ class NotifyEmailJob implements ShouldQueue, ShouldBeUnique
     $user_type = $user->is_technician ? 'technician' : 'client';
 
     if(Job::where($user_type.'_id', $this->userID)->where('notify_'.$user_type, true)->count() > 0){
-      Mail::to("test@example.com")->send(new NotifyEmail($this->userID));
+      Mail::to("tristan.lieberherr@heig-vd.ch")->send(new NotifyEmail($this->userID));
     }
   }
 }
