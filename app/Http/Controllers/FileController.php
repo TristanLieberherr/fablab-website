@@ -43,7 +43,7 @@ class FileController extends Controller
     { 
       $job = Job::find($request->job_id);
       $job->notify_technician = true;
-      //$job->notify_client = true;
+      $job->notify_client = true;
       $job->save();
       $tempFiles = Array();
       $tempTimeline = Array();
@@ -54,6 +54,7 @@ class FileController extends Controller
         $newFile->name = $file->getClientOriginalName();
         $newFile->job_id = $request->job_id;
         $newFile->save();
+        $newFile = File::find($newFile->id);
         $tempFiles[] = $newFile;
         $file->storeAs('FileStorage', hash_file('sha256', $file));
         
@@ -62,6 +63,7 @@ class FileController extends Controller
         $newTimelineEvent->type = "file";
         $newTimelineEvent->data = $newFile->name;
         $newTimelineEvent->save();
+        $newTimelineEvent = TimelineEvent::find($newTimelineEvent->id);
         $tempTimeline[] = $newTimelineEvent;
       }
 
@@ -69,7 +71,7 @@ class FileController extends Controller
       $job->files = $tempFiles;
       $job->timeline = $tempTimeline;
 
-      broadcast(new JobPusherEvent($job, $job->technician_id))->toOthers();
+      broadcast(new JobPusherEvent($job, $request->user()->is_technician ? $job->client_id : $job->technician_id))->toOthers();
       return $job;
     }
 

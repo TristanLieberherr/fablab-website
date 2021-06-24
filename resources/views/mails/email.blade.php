@@ -164,7 +164,7 @@
               style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: #7e8c8d;">
               <div style="border-collapse: collapse;display: table;width: 100%;background-color: transparent;">
                 <div class="u-col u-col-33p33"
-                  style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
+                  style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: middle;">
                   <div style="width: 100% !important;">
                     <div
                       style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
@@ -176,7 +176,7 @@
                               style="overflow-wrap:break-word;word-break:break-word;padding:10px 20px;font-family:'Lato',sans-serif;"
                               align="left">
                               <div style="color: #ffffff; line-height: 120%; text-align: left; word-wrap: break-word;">
-                                <p style="font-size: 14px; line-height: 120%; text-align: center;"><strong>Demande de {{ $job->job_type }}</strong></p>
+                                <p style="font-size: 14px; line-height: 120%; text-align: center;"><strong>Demande {{ $jobTypeTextFormatter[$job->job_type] }}</strong></p>
                               </div>
                             </td>
                           </tr>
@@ -186,7 +186,7 @@
                   </div>
                 </div>
                 <div class="u-col u-col-33p33"
-                  style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
+                  style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: middle;">
                   <div style="width: 100% !important;">
                     <div
                       style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
@@ -198,7 +198,7 @@
                               style="overflow-wrap:break-word;word-break:break-word;padding:10px 20px;font-family:'Lato',sans-serif;"
                               align="left">
                               <div style="color: #ffffff; line-height: 120%; text-align: left; word-wrap: break-word;">
-                                <p style="font-size: 14px; line-height: 120%; text-align: center;"><strong>Du {{ $job->created_at }}</strong></p>
+                                <p style="font-size: 14px; line-height: 120%; text-align: center;"><strong>Du {{ \Carbon\Carbon::parse($job->created_at)->format('d/m/Y') }}</strong></p>
                               </div>
                             </td>
                           </tr>
@@ -208,7 +208,7 @@
                   </div>
                 </div>
                 <div class="u-col u-col-33p33"
-                  style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
+                  style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: middle;">
                   <div style="width: 100% !important;">
                     <div
                       style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
@@ -221,7 +221,13 @@
                               align="left">
                               <div style="color: #ffffff; line-height: 120%; text-align: left; word-wrap: break-word;">
                                 <p style="font-size: 14px; line-height: 120%; text-align: center;">
-                                <strong>Responsable : {{ $job->interlocutor->surname[0].".".$job->interlocutor->name }}</strong></p>
+                                <strong>
+                                  @if ($job->interlocutor)
+                                  Responsable : {{ $job->interlocutor->surname[0].".".$job->interlocutor->name }}
+                                  @else
+                                  Non assigné
+                                  @endif
+                                </strong></p>
                               </div>
                             </td>
                           </tr>
@@ -273,7 +279,10 @@
                               style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Lato',sans-serif;"
                               align="left">
                               <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
-                                <p style="font-size: 14px; line-height: 140%; text-align: left;">{{ $job->new_status_event->data }}</p>
+                                <p style="font-size: 14px; line-height: 140%; text-align: left;
+                                 width: fit-content; border: 3px solid {{$jobStatusColorFormatter[$job->new_status_event->data]}};
+                                background: {{$jobStatusColorFormatter[$job->new_status_event->data]}}; border-radius: 3px;">
+                                 {{ strtoupper($job->new_status_event->data) }}</p>
                               </div>
                             </td>
                           </tr>
@@ -450,7 +459,7 @@
                                 <a href="http://161.35.217.7/app/jobs/my-jobs" target="_blank"
                                   style="box-sizing: border-box;display: inline-block;font-family:'Lato',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #3AAEE0; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                   <span style="display:block;padding:10px 20px;line-height:120%;"><span
-                                      style="font-size: 14px; line-height: 16.8px;">Cliquez ici pour y accéderdepuis l'interface web</span></span>
+                                      style="font-size: 14px; line-height: 16.8px;">Cliquez ici pour y accéder depuis l'interface web</span></span>
                                 </a>
                               </div>
                             </td>
