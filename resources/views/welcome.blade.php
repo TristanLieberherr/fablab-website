@@ -45,11 +45,11 @@
     }
   </style>
   <link href="/assets/css/chunk-vendors.8b3bdf1b.css" rel="preload" as="style">
-  <link href="/assets/css/index.99a6a3e2.css" rel="preload" as="style">
+  <link href="/assets/css/index.d5e2bd73.css" rel="preload" as="style">
   <link href="/assets/js/chunk-vendors.9dd277c8.js" rel="preload" as="script">
-  <link href="/assets/js/index.1d2df3d1.js" rel="preload" as="script">
+  <link href="/assets/js/index.9794fa67.js" rel="preload" as="script">
   <link href="/assets/css/chunk-vendors.8b3bdf1b.css" rel="stylesheet">
-  <link href="/assets/css/index.99a6a3e2.css" rel="stylesheet">
+  <link href="/assets/css/index.d5e2bd73.css" rel="stylesheet">
 </head>
 
 <body class="body"><noscript>You need to enable JavaScript to run this app.</noscript>
@@ -57,7 +57,7 @@
     <div class="loading"></div>
   </div>
   <script src="/assets/js/chunk-vendors.9dd277c8.js"></script>
-  <script src="/assets/js/index.1d2df3d1.js"></script>
+  <script src="/assets/js/index.9794fa67.js"></script>
 </body>
 
 </html>
