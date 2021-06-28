@@ -27,11 +27,12 @@ class CreateJobsTable extends Migration
         $table->string('client_surname');
         $table->string('technician_name')->nullable();
         $table->string('technician_surname')->nullable();
+        $table->integer('rating')->nullable();
         $table->timestamps();
+        $table->softDeletes();
 
         $table->foreign('client_id')->references('id')->on('users');
         $table->foreign('technician_id')->references('id')->on('users');
-        //$table->softDeletes();
       });
     }
 

@@ -21,11 +21,11 @@ class CreateMessagesTable extends Migration
         $table->text('text');
         $table->boolean('notify')->default(true);
         $table->timestamps();
+        $table->softDeletes();
 
         $table->foreign('sender_id')->references('id')->on('users');
         $table->foreign('recipient_id')->references('id')->on('users');
         $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
-        //$table->softDeletes();
       });
     }
 

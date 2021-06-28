@@ -221,11 +221,16 @@ class JobController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy($id)
+  public function terminate(Request $request)
   {
-    $job = Job::find($id);
+    error_log($request);
+    $job = Job::find($request->id);
+    $job->rating = $request->rating;
+    $job->save();
+    $job->terminated = true;
     $job->delete();
-
-    return $id;
+    
+    broadcast(new JobPusherEvent($job, $job->technician_id))->toOthers();
+    return $job;
   }
 }

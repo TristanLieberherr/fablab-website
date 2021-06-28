@@ -48,7 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/update-status/{id}', [JobController::class, 'updateStatus']);
     Route::post('/update-notify/{id}', [JobController::class, 'updateNotify']);
     Route::post('/assign', [JobController::class, 'assign']);
-    Route::post('/destroy/{id}', [JobController::class, 'destroy']);
+    Route::post('/terminate', [JobController::class, 'terminate']);
   });
 
   Route::get('/messages/{id}', [MessageController::class, 'index']);
