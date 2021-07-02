@@ -8,6 +8,7 @@ use App\Models\File;
 use App\Models\Job;
 use App\Models\TimelineEvent;
 use App\Events\JobPusherEvent;
+use App\Http\Controllers\NotifyEmailController;
 
 
 class FileController extends Controller
@@ -18,6 +19,8 @@ class FileController extends Controller
     $job->notify_technician = true;
     $job->notify_client = true;
     $job->save();
+    $interlocutor = $request->user()->is_technician ? $job->client_id : $job->technician_id;
+    NotifyEmailController::dispatchMailJob($interlocutor);
     $addedFiles = Array();
     $addedTimeline = Array();
 
@@ -44,7 +47,7 @@ class FileController extends Controller
     //The timeline and files must be attached to the job as additional properties
     $job->files = $addedFiles;
     $job->timeline = $addedTimeline;
-    broadcast(new JobPusherEvent($job, $request->user()->is_technician ? $job->client_id : $job->technician_id))->toOthers();
+    broadcast(new JobPusherEvent($job, $interlocutor))->toOthers();
     return $job;
   }//return : the job with it's newly added files and timeline arrays 
 

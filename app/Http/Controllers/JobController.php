@@ -11,6 +11,7 @@ use App\Models\File;
 use App\Models\TimelineEvent;
 use App\Models\Message;
 use App\Events\JobPusherEvent;
+use App\Http\Controllers\NotifyEmailController;
 
 
 class JobController extends Controller
@@ -85,6 +86,7 @@ class JobController extends Controller
     $job->notify_client = true;
     $job->save();
     $job = Job::find($job->id);
+    NotifyEmailController::dispatchMailJob($job->client_id);
 
     $newTimelineEvent = new TimelineEvent;
     $newTimelineEvent->job_id = $job->id;
@@ -139,6 +141,7 @@ class JobController extends Controller
         $job->technician_surname = $user->surname;
         $job->save();
         $job = Job::find($job->id);
+        NotifyEmailController::dispatchMailJob($job->client_id);
     
         $newTimelineEvent = new TimelineEvent;
         $newTimelineEvent->job_id = $job->id;

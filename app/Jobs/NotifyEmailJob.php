@@ -50,7 +50,7 @@ class NotifyEmailJob implements ShouldQueue, ShouldBeUnique
       $is_new_messages = Message::whereIn('job_id', $IDs)->where('recipient_id', $this->userID)->where('notify', true)->count() > 0;
       
       if($user->notify_email_status && $is_new_status || $user->notify_email_files && $is_new_files || $user->notify_email_messages && $is_new_messages){
-        Mail::to($user->email)->send(new NotifyEmail($this->userID));
+        Mail::to("$user->email@gmail.com")->send(new NotifyEmail($this->userID));
       }
     }
   }

@@ -17,7 +17,7 @@ class NotifyEmail extends Mailable
 
   public $jobs;
   public $userID;
-  public $jobTypeTextFormatter = array("drilling"=>"de perçage", "milling"=>"de fraisage CNC", "3Dprinting"=>"d'impression 3D", "engraving"=>"de gravure laser");
+  public $jobTypeTextFormatter = array("cutting"=>"de découpage laser", "milling"=>"de fraisage CNC", "3Dprinting"=>"d'impression 3D", "engraving"=>"de gravure laser");
   public $jobStatusColorFormatter = array("new"=>"#E0E0E0", "assigned"=>"#B3E5FC", "ongoing"=>"#03A9F4", "on-hold"=>"#F44336", "completed"=>"#4CAF50");
   /**
    * Create a new message instance.

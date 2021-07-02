@@ -13,7 +13,7 @@ class NotifyEmailController extends Controller
 {
   public static function dispatchMailJob($id)
   {
-    NotifyEmailJob::dispatch($id)->delay(now()->addMinutes(10));
-    //NotifyEmailJob::dispatch($id)->delay(now()->addSeconds(10));
+    //NotifyEmailJob::dispatch($id)->delay(now()->addMinutes(10));
+    NotifyEmailJob::dispatch($id)->delay(now()->addSeconds(10));
   }
 }
