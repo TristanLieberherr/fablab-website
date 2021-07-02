@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\JobController;
-use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\TimelineEventController;
@@ -45,8 +44,8 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/jobs/{id}', [JobController::class, 'index']);
   Route::prefix('/job')->group(function () { 
     Route::post('/store', [JobController::class, 'store']);
-    Route::post('/update-status/{id}', [JobController::class, 'updateStatus']);
-    Route::post('/update-notify/{id}', [JobController::class, 'updateNotify']);
+    Route::post('/update-status', [JobController::class, 'updateStatus']);
+    Route::post('/update-notify', [JobController::class, 'updateNotify']);
     Route::post('/assign', [JobController::class, 'assign']);
     Route::post('/terminate', [JobController::class, 'terminate']);
   });
@@ -56,19 +55,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/store', [MessageController::class, 'store']);
   });
 
-  Route::get('/notifications/{id}', [NotificationController::class, 'index']);
-  Route::prefix('/notification')->group(function () { 
-    Route::post('/store', [NotificationController::class, 'store']);
-    Route::post('/destroy/{id}', [NotificationController::class, 'destroy']);
-  });
-
   Route::prefix('/file')->group(function () { 
     Route::post('/store', [FileController::class, 'store']);
     Route::get('/download/{id}', [FileController::class, 'download']);
   });
-
-  //Used or not?
-  Route::prefix('/timeline-event')->group(function () { 
-    Route::post('/store', [TimelineEventController::class, 'store']);    
-  }); 
 });
