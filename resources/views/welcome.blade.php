@@ -22,22 +22,22 @@
       position: fixed;
       z-index: 1;
     }
-
+    
     .body {
       padding-bottom: 0;
       overflow-y: auto;
     }
-
+    
     .html {
       overflow-y: auto;
     }
-
+    
     @keyframes spin {
       to {
         -webkit-transform: rotate(360deg);
       }
     }
-
+    
     @-webkit-keyframes spin {
       to {
         -webkit-transform: rotate(360deg);
@@ -47,7 +47,7 @@
   <link href="/assets/css/chunk-vendors.3b2cecc3.css" rel="preload" as="style">
   <link href="/assets/css/index.a4aa5897.css" rel="preload" as="style">
   <link href="/assets/js/chunk-vendors.2989033a.js" rel="preload" as="script">
-  <link href="/assets/js/index.0a749e17.js" rel="preload" as="script">
+  <link href="/assets/js/index.a991ac08.js" rel="preload" as="script">
   <link href="/assets/css/chunk-vendors.3b2cecc3.css" rel="stylesheet">
   <link href="/assets/css/index.a4aa5897.css" rel="stylesheet">
 </head>
@@ -57,7 +57,7 @@
     <div class="loading"></div>
   </div>
   <script src="/assets/js/chunk-vendors.2989033a.js"></script>
-  <script src="/assets/js/index.0a749e17.js"></script>
+  <script src="/assets/js/index.a991ac08.js"></script>
 </body>
 
 </html>

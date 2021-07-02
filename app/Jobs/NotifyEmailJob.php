@@ -9,7 +9,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-
 use App\Mail\NotifyEmail;
 use App\Models\Job;
 use App\Models\User;
@@ -51,7 +50,7 @@ class NotifyEmailJob implements ShouldQueue, ShouldBeUnique
       $is_new_messages = Message::whereIn('job_id', $IDs)->where('recipient_id', $this->userID)->where('notify', true)->count() > 0;
       
       if($user->notify_email_status && $is_new_status || $user->notify_email_files && $is_new_files || $user->notify_email_messages && $is_new_messages){
-        Mail::to("tristan.lieberherr@heig-vd.ch")->send(new NotifyEmail($this->userID));
+        Mail::to($user->email)->send(new NotifyEmail($this->userID));
       }
     }
   }
