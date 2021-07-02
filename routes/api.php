@@ -19,7 +19,7 @@ use App\Http\Controllers\TimelineEventController;
 |
 */
 
-//<useless>
+//<test-only>
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
@@ -27,7 +27,7 @@ Route::group(['middleware' => ['web']], function () {
   Route::get('/login/{id}', function (Request $request, $id) { Auth::loginUsingId($id); return Auth::user(); });    
 });
 Route::get('/email/{id}', [App\Http\Controllers\NotifyEmailController::class, 'dispatchMailJob']);
-//</useless>
+//</test-only>
 
 Route::prefix('/user')->group(function () {
   Route::post('/login', [UserController::class, 'login']);

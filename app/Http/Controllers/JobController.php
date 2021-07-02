@@ -34,7 +34,7 @@ class JobController extends Controller
   }//return : the jobs array with their full timeline, full files and full messages arrays
 
   public function store(Request $request)//Called when a new job is submitted
-  {//input : {client_id: client's id, job_type: one of the available job types, deadline: JSON deadline date, description: comment, uploadedFiles[]: array of associated files}
+  {//input : {client_id: client's id, job_type: one of the available job types, deadline: JSON deadline date, description: comment, uploadedFiles: [associated files]}
     $user = $request->user();
     $newJob = new Job;
     $newJob->client_id = $request->client_id;
@@ -125,7 +125,7 @@ class JobController extends Controller
   }//return : the job
 
   public function assign(Request $request)//Called when a technician has assigned some jobs to himself
-  {//input : {idArray: array of job's IDs}
+  {//input : {idArray: [job's IDs]}
     $user = $request->user();
     $jobArray = array();
     foreach ($request->idArray as $id) {

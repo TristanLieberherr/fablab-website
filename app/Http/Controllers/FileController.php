@@ -13,7 +13,7 @@ use App\Events\JobPusherEvent;
 class FileController extends Controller
 {
   public function store(Request $request)//Called when files are added to an existing job
-  {//input : {job_id: job's id, uploaded_files[]: the files to be uploaded}
+  {//input : {job_id: job's id, uploaded_files: [the files to be uploaded]}
     $job = Job::find($request->job_id);
     $job->notify_technician = true;
     $job->notify_client = true;
