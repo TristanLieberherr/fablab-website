@@ -30,7 +30,7 @@ Route::get('/email/{id}', [App\Http\Controllers\NotifyEmailController::class, 'd
 //</test-only>
 
 Route::prefix('/user')->group(function () {
-  Route::post('/login', [UserController::class, 'login']);
+  //Route::post('/login', [UserController::class, 'login']);
   Route::post('/logout', [UserController::class, 'logout']);
 });
 

@@ -18,10 +18,9 @@ class CreateUsersTable extends Migration
       $table->string('name');
       $table->string('surname');
       $table->string('email')->unique();
-      $table->timestamp('email_verified_at')->nullable();
+      //$table->timestamp('email_verified_at')->nullable();
       $table->boolean('is_technician')->default(false);
-      $table->string('password');
-
+      $table->string('password')->nullable();
       $table->boolean('notify_email_status')->default(true);
       $table->boolean('notify_email_messages')->default(true);
       $table->boolean('notify_email_files')->default(true);

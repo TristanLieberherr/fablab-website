@@ -13,14 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::any('{all}', function () {
-  /*if (Auth::user()) {
-    return view('welcome');
-  }
-  return view('login');*/
-  return view('welcome');
-})->where('all', '^(?!api|prout).*$');
-
-
-Route::any('/prout', function() {
-  return Auth::user();
-});
+  return view('welcome', \Auth::user());
+})->where('all', '^(?!api).*$')->middleware('auth');
