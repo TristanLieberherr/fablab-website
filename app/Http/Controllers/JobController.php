@@ -16,12 +16,13 @@ use App\Http\Controllers\NotifyEmailController;
 
 class JobController extends Controller
 {
-  public function index($id)//Called when a user wants to retrieve his jobs
+  public function index($id, Request $request)//Called when a user wants to retrieve his jobs
   {//input : {id: the user's id}
-    if ($id == 0) {
+    $user = $request->user();
+    if ($id == 0 && $user->is_technician) {
       $jobs = Job::where('technician_id', null)->get(); //Special case where all the unassigned jobs are retrieved
     } else {
-      $jobs = User::find($id)->is_technician ? Job::where('technician_id', $id)->orWhere('client_id', $id)->get() : Job::where('client_id', $id)->get();
+      $jobs = $user->is_technician ? Job::where('technician_id', $user->id)->orWhere('client_id', $user->id)->get() : Job::where('client_id', $user->id)->get();
     }
 
     foreach ($jobs as $job) {

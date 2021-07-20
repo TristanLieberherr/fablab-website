@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::any('{all}', function () {
-  return view('welcome', \Auth::user());
+
+Route::any('/admin', function () {
+  return view('app');
+})->where('all', '^(?!api).*$')->middleware('auth.basic');
+
+Route::name('welcome')->any('/welcome', function () {
+  return view('welcome');
+});
+
+Route::name('app')->any('{all}', function () {
+  return view('app');
 })->where('all', '^(?!api).*$')->middleware('auth');

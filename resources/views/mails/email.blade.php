@@ -311,7 +311,7 @@
                                 <p style="font-size: 14px; line-height: 120%; text-align: center;">
                                   <strong>
                                     @if ($job->interlocutor)
-                                    Responsable : {{ $job->interlocutor->surname[0].".".$job->interlocutor->name }}
+                                    Responsable : {{ $job->interlocutor->name[0].".".$job->interlocutor->surname }}
                                     @else
                                     Non assigné
                                     @endif
@@ -370,9 +370,9 @@
                               <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
                                 <p
                                   style="font-size: 14px; line-height: 140%; text-align: left;
-                                 width: fit-content; border: 3px solid {{$jobStatusColorFormatter[$job->new_status_event->data]}};
-                                background: {{$jobStatusColorFormatter[$job->new_status_event->data]}}; border-radius: 3px;">
-                                  {{ strtoupper($job->new_status_event->data) }}</p>
+                                 width: fit-content; border: 3px solid {{$jobStatusFormatter[$job->new_status_event->data]['color']}};
+                                background: {{$jobStatusFormatter[$job->new_status_event->data]['color']}}; border-radius: 3px;">
+                                  {{ $jobStatusFormatter[$job->new_status_event->data]['name'] }}</p>
                               </div>
                             </td>
                           </tr>
@@ -548,7 +548,7 @@
                               style="overflow-wrap:break-word;word-break:break-word;padding:20px;font-family:'Lato',sans-serif;"
                               align="left">
                               <div align="center">
-                                <a href="http://{{env('APP_URL')}}/app/jobs/my-jobs" target="_blank"
+                                <a href="https://{{env('APP_URL')}}" target="_blank"
                                   style="box-sizing: border-box;display: inline-block;font-family:'Lato',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #3AAEE0; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                   <span style="display:block;padding:10px 20px;line-height:120%;"><span
                                       style="font-size: 14px; line-height: 16.8px;">Cliquez ici pour y accéder depuis

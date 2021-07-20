@@ -43,14 +43,16 @@ class NotifyEmailJob implements ShouldQueue, ShouldBeUnique
     $user_type = $user->is_technician ? 'technician' : 'client';
     $jobs = Job::where($user_type.'_id', $this->userID)->where('notify_'.$user_type, true);
 
-    if($jobs->count() > 0){
+    if($jobs->count() > 0)
+    {
       $IDs = $jobs->pluck('id');
-      $is_new_status = TimelineEvent::whereIn('job_id', $IDs)->where('type', 'status')->where('notify_'.$user_type, true)->count() > 0;
-      $is_new_files = TimelineEvent::whereIn('job_id', $IDs)->where('type', 'file')->where('notify_'.$user_type, true)->count() > 0;
-      $is_new_messages = Message::whereIn('job_id', $IDs)->where('recipient_id', $this->userID)->where('notify', true)->count() > 0;
+      $is_new_status = TimelineEvent::whereIn('job_id', $IDs)->where('type', 'status')->where('notify_'.$user_type, true)->where('created_at', '>', $user->notify_email_updated_at)->count() > 0;
+      $is_new_files = TimelineEvent::whereIn('job_id', $IDs)->where('type', 'file')->where('notify_'.$user_type, true)->where('created_at', '>', $user->notify_email_updated_at)->count() > 0;
+      $is_new_messages = Message::whereIn('job_id', $IDs)->where('recipient_id', $this->userID)->where('notify', true)->where('created_at', '>', $user->notify_email_updated_at)->count() > 0;
       
-      if($user->notify_email_status && $is_new_status || $user->notify_email_files && $is_new_files || $user->notify_email_messages && $is_new_messages){
-        Mail::to("$user->email@gmail.com")->send(new NotifyEmail($this->userID));
+      if($user->notify_email_status && $is_new_status || $user->notify_email_files && $is_new_files || $user->notify_email_messages && $is_new_messages)
+      {
+        Mail::to($user->email)->send(new NotifyEmail($this->userID));
       }
     }
   }

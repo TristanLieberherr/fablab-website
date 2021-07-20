@@ -9,19 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-  public function login(Request $request)
+  public function logout(Request $request)//Called when the user wants to disconnect
   {
-    $credentials = $request->only('email', 'password');
-    if (Auth::attempt($credentials)){
-      return Auth::user();
-    }
-    return abort(403);
-  }
-
-  public function logout(Request $request)
-  {
-    Auth::logout();
-  }
+    return redirect("shibboleth-logout");
+  }//return : route to shibboleth logout handler
 
   public function updateSettings(Request $request)//Called when a user has changed some settings
   {//input : {fields : [{name : the name of the column (e.g "notify_email_status"), value : the new boolean value}]}
@@ -30,6 +21,7 @@ class UserController extends Controller
     foreach($fields as $field){
       $user[$field["name"]] = $field["value"];
     }
+    $user->notify_email_updated_at = now();
     $user->save();
     
     return $user;

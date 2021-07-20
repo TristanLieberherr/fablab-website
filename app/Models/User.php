@@ -24,7 +24,8 @@ class User extends Authenticatable
     'is_technician',
     'notify_email_status',
     'notify_email_messages',
-    'notify_email_files'
+    'notify_email_files',
+    'notify_email_updated_at'
   ];
 
   /**
@@ -32,10 +33,11 @@ class User extends Authenticatable
    *
    * @var array
    */
-  /*protected $hidden = [
+  protected $hidden = [
     'password',
-    'remember_token'
-  ];*/
+    'remember_token',
+    'notify_email_updated_at'
+  ];
 
   /**
    * The attributes that should be cast to native types.

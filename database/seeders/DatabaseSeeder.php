@@ -16,27 +16,21 @@ class DatabaseSeeder extends Seeder
   {
     // \App\Models\User::factory(10)->create();
     User::insert([
-      'name' => 'Lieberherr',
-      'surname' => 'Tristan',
-      'email' => 'tristan',
-      'password' => bcrypt('password'),
-    ]);
-    User::insert([
-      'name' => 'Chevallier',
-      'surname' => 'Yves',
-      'email' => 'yves',
+      'name' => 'Ludwig',
+      'surname' => '1',
+      'email' => 'Beethoven',
       'password' => bcrypt('password'),
     ]);
       User::insert([
-      'name' => 'Bravo',
-      'surname' => 'Johnny',
-      'email' => 'tech',
+      'name' => 'Sebastian',
+      'surname' => 'Bach',
+      'email' => 'tech1',
       'is_technician' => true,
       'password' => bcrypt('password'),
     ]);
     User::insert([
-      'name' => 'Ventura',
-      'surname' => 'Ace',
+      'name' => 'Amadeus',
+      'surname' => 'Mozart',
       'email' => 'tech2',
       'is_technician' => true,
       'password' => bcrypt('password'),
