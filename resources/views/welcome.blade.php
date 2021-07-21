@@ -1,95 +1,88 @@
 <!--
-Template found on https://freefrontend.com/css-login-forms/
-Author : Mikael Ainalem, 12/02/2018
-Modified and adapted by : Tristan Lieberherr, 19/07/2021
+Template found on https://freefrontend.com/css-forms/
+Author : Håvard Brynjulfsen, 17/07/2020
+Modified and adapted by : Tristan Lieberherr, 21/07/2021
 -->
 <!DOCTYPE html>
 <html lang="en" class="html">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
-    body {
-      background: white;
-      font-family: 'Inter UI', sans-serif;
-      margin: 0;
-      padding: 20px;
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+    *,
+    *:after,
+    *:before {
+      box-sizing: border-box;
     }
 
-    .page {
-      background: #e2e2e5;
+    body {
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.5;
+      background-color: #f1f3fb;
+      padding: 0 2rem;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .card {
+      margin: 2rem auto;
       display: flex;
       flex-direction: column;
-      height: calc(100% - 40px);
-      position: absolute;
-      place-content: center;
-      width: calc(100% - 40px);
+      width: 100%;
+      max-width: 425px;
+      background-color: #FFF;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px 0 rgba(#999, .25);
+      padding: .75rem;
     }
 
-    @media (max-width: 767px) {
-      .page {
-        height: auto;
-        margin-bottom: 20px;
-        padding-bottom: 20px;
-      }
+    .action {
+      margin-top: 2rem;
     }
 
-    .container {
-      display: flex;
-      height: 320px;
-      margin: 0 auto;
-      width: 640px;
-    }
-
-    @media (max-width: 767px) {
-      .container {
-        flex-direction: column;
-        height: 630px;
-        width: 320px;
-      }
-    }
-
-    .left {
-      background: white;
-      height: calc(100% - 40px);
-      top: 20px;
-      position: relative;
-      width: 50%;
-    }
-
-    @media (max-width: 767px) {
-      .left {
-        height: 100%;
-        left: 20px;
-        width: calc(100% - 40px);
-        max-height: 270px;
-      }
+    .action-button {
+      font: inherit;
+      font-size: 1.25rem;
+      padding: 1em;
+      width: 100%;
+      font-weight: 500;
+      background-color: dimgray;
+      border-radius: 6px;
+      color: #FFF;
+      border: 0;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
-  <div class="page">
-    <div class="container">
-      <div class="left">
-        <img src="{{ asset('img/heig_2020.svg') }}" alt="" style="margin: 20px">
+  <div class="container">
+    <div class="card">
+      <div>
+        <img src="{{ asset('img/heig_2020.svg') }}" alt="" style="margin: 15%; margin-top: 20px; margin-bottom: 20px;">
       </div>
-      <div class="left">
-        <h2>Bienvenue sur la plateforme des demandes de travaux du FabLab HEIG-VD</h2>
-        <div>
-          <p>Merci de vous connecter pour continuer</p>
-          <div style="text-align: center">
-            <a href="/shibboleth-login"><button>Se connecter</button></a>
-          </div>
-        </div>
+      <h2 style="text-align: center">
+        Bienvenue sur la plateforme des demandes de travaux du FabLab
+      </h2>
+      <p style="text-align: center">
+        <small>
+          Avant de continuer, merci de vous connecter depuis votre compte Switch AAI
+        </small>
+      </p>
+      <div class="action">
+        <form action="/shibboleth-login">
+          <button class="action-button">Se connecter</button>
+        </form>
       </div>
     </div>
   </div>
-  <noscript>
-    <p>
-      <strong>Login:</strong> Javascript is not enabled for your web browser. Please use the <a
-        href="/Shibboleth.sso/DS?target=https%3A%2F%2Ftb21-lieberherr.heig-vd.ch%2F">non-Javascript Login</a>.
-    </p>
-  </noscript>
 </body>
 
 </html>

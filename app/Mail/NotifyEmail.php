@@ -32,6 +32,7 @@ class NotifyEmail extends Mailable
   public function __construct($id)
   {
     $this->userID = $id;
+    $this->subject("Notifications pour vos travaux");
   }
 
   /**
