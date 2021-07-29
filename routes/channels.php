@@ -13,22 +13,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-  return (int) $user->id === (int) $id;
-});
-
-Broadcast::channel('notification.channel.{id}', function ($user, $id) {
-  return (int) $user->id === (int) $id;
-});
-
 Broadcast::channel('message.channel.{id}', function ($user, $id) {
   return (int) $user->id === (int) $id;
 });
 
 Broadcast::channel('job.channel.{id}', function ($user, $id) {
-  return (int) $user->id === (int) $id;
-});
-
-Broadcast::channel('timeline.channel.{id}', function ($user, $id) {
   return (int) $user->id === (int) $id;
 });

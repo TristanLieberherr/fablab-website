@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//<test route>
 Route::any('/admin', function () {
   return view('app');
 })->where('all', '^(?!api).*$')->middleware('auth.basic');
+//</test route>
 
 Route::name('welcome')->any('/welcome', function () {
   return view('welcome');

@@ -19,9 +19,9 @@ use App\Http\Controllers\TimelineEventController;
 |
 */
 
-//<test-only>
-Route::get('/email/{id}', [App\Http\Controllers\NotifyEmailController::class, 'dispatchMailJob']);
-//</test-only>
+//<test route>
+//Route::get('/email/{id}', [App\Http\Controllers\NotifyEmailController::class, 'dispatchMailJob']);
+//</test route>
 
 Route::prefix('/user')->group(function () {
   Route::post('/logout', [UserController::class, 'logout']);
@@ -43,7 +43,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/terminate', [JobController::class, 'terminate']);
   });
 
-  Route::get('/messages/{id}', [MessageController::class, 'index']);
   Route::prefix('/message')->group(function () { 
     Route::post('/store', [MessageController::class, 'store']);
   });

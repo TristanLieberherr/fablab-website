@@ -19,7 +19,6 @@ class CreateFilesTable extends Migration
       $table->string('hashed_name');
       $table->string('name');
       $table->timestamps();
-      //$table->softDeletes();
 
       $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
     });

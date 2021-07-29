@@ -21,7 +21,6 @@ class CreateTimelineEventsTable extends Migration
       $table->boolean('notify_client')->default(true);
       $table->boolean('notify_technician')->default(true);
       $table->timestamps();
-      //$table->softDeletes();
 
       $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
     });
